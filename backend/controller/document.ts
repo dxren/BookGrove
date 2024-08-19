@@ -4,26 +4,39 @@ import { CreateDocumentBody, CreateDocumentResponse, GetDocumentResponse, Update
 
 export const documentRouter = Router();
 
-// CREATE
+// CREATE_DOCUMENT
 documentRouter.post('/', processRequest({body: CreateDocumentBody}), (req, res) => {
     const result: CreateDocumentResponse = {message: `Create document: ${req.body.message}`};
     res.json(result);
 });
 
-// GET_CURRENT
-documentRouter.get('/', (_, res) => {
-    const result: GetDocumentResponse = {message: 'Get current document'};
+// GET_DOCUMENT_BY_ID
+documentRouter.get('/:id', (req, res) => {
+    const result: GetDocumentResponse = {message: `Get document by id: ${req.params.id}`};
     res.json(result);
 });
 
-// UPDATE_CURRENT
-documentRouter.put('/', processRequest({body: UpdateDocumentBody}), (req, res) => {
-    const result: UpdateDocumentResponse = {message: `Update current document: ${req.body.message}`};
+// GET_DOCUMENT_BY_BOOK
+documentRouter.get('/book/:bookId', (req, res) => {
+    const result: GetDocumentResponse = {message: `Get document by book id: ${req.params.bookId}`};
     res.json(result);
 });
 
-// DELETE_CURRENT
-documentRouter.delete('/', (_, res) => {
-    const result: DeleteDocumentResponse = {message: `Delete current document`};
+// GET_DOCUMENT_BY_TAG
+documentRouter.get('/tag/:tag', (req, res) => {
+    const result: GetDocumentResponse = {message: `Get document by tag: ${req.params.tag}`};
+    res.json(result);
+});
+
+
+// UPDATE_DOCUMENT
+documentRouter.put('/:id', processRequest({body: UpdateDocumentBody}), (req, res) => {
+    const result: UpdateDocumentResponse = {message: `Update document ${req.params.id}: ${req.body.message}`};
+    res.json(result);
+});
+
+// DELETE_DOCUMENT
+documentRouter.delete('/:id', (req, res) => {
+    const result: DeleteDocumentResponse = {message: `Delete document ${req.params.id}`};
     res.json(result);
 });
