@@ -24,44 +24,44 @@ model User {
   updatedAt   DateTime @updatedAt
   stripeId    String?
 
-  Document Document[]
-  Book     Book[]
-  Analysis Analysis[]
+  document Document[]
+  book     Book[]
+  analysis UserAnalysis[]
 }
 
 model Document {
-  id        String            @id @default(uuid())
-  createdAt DateTime          @default(now())
-  analysis  DocumentAnalysis?
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
 
   //Relations
-  user       User   @relation(fields: [userId], references: [id])
-  userId     String
-  analysisId String
+  user     User              @relation(fields: [userId], references: [id])
+  userId   String
+  analysis DocumentAnalysis?
 }
 
 model Book {
-  id       String        @id @default(uuid())
-  title    String
-  analysis BookAnalysis?
+  id    String @id @default(uuid())
+  title String
 
   //relations
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  user     User          @relation(fields: [userId], references: [id])
+  userId   String
+  analysis BookAnalysis?
 }
 
-model Analysis {
+model UserAnalysis {
   id        String   @id @default(uuid())
   summary   String
   createdAt DateTime @default(now())
 
   //relations 
   user   User   @relation(fields: [userId], references: [id])
-  userId String
+  userId String @unique
 }
 
 model BookAnalysis {
   id        String   @id @default(uuid())
+  summary   String
   createdAt DateTime @default(now())
 
   //relations 
@@ -71,6 +71,7 @@ model BookAnalysis {
 
 model DocumentAnalysis {
   id        String   @id @default(uuid())
+  summary   String
   createdAt DateTime @default(now())
 
   //relations 
