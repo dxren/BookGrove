@@ -9,6 +9,72 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  firstName   String?
+  lastName    String?
+  displayName String
+  email       String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  stripeId    String?
+
+  document Document[]
+  book     Book[]
+  analysis UserAnalysis[]
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  //Relations
+  user     User              @relation(fields: [userId], references: [id])
+  userId   String
+  analysis DocumentAnalysis?
+}
+
+model Book {
+  id    String @id @default(uuid())
+  title String
+
+  //relations
+  user     User          @relation(fields: [userId], references: [id])
+  userId   String
+  analysis BookAnalysis?
+}
+
+model UserAnalysis {
+  id        String   @id @default(uuid())
+  summary   String
+  createdAt DateTime @default(now())
+
+  //relations 
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model BookAnalysis {
+  id        String   @id @default(uuid())
+  summary   String
+  createdAt DateTime @default(now())
+
+  //relations 
+  book   Book   @relation(fields: [bookId], references: [id])
+  bookId String @unique
+}
+
+model DocumentAnalysis {
+  id        String   @id @default(uuid())
+  summary   String
+  createdAt DateTime @default(now())
+
+  //relations 
+  document   Document @relation(fields: [documentId], references: [id])
+  documentId String   @unique
 }
